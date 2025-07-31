@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity App - Vanilla JS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Side - Todo App -->
+        <div class="todo-section">
+            <h1>Todos</h1>
+            
+            <form id="todo-form" class="todo-form">
+                <div class="form-group">
+                    <label for="todo-input">New todo</label>
+                    <input 
+                        type="text" 
+                        id="todo-input" 
+                        placeholder="What needs to be done?"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="todo-date">Due date (optional)</label>
+                    <input type="date" id="todo-date">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="add-todo-btn">
+                    Add Todo
+                </button>
+            </form>
+
+            <div class="divider"></div>
+
+            <div id="todos-container" class="todos-container">
+                <div class="empty-state" id="todos-empty">
+                    <p>No todos yet!</p>
+                </div>
+            </div>
+
+            <div id="todo-stats" class="todo-stats" style="display: none;">
+                <span id="remaining-count">0</span> of <span id="total-count">0</span> remaining
+            </div>
+        </div>
+
+        <!-- Right Side - Notes App -->
+        <div class="notes-section">
+            <!-- Notes Sidebar -->
+            <div class="notes-sidebar">
+                <div class="notes-header">
+                    <div class="notes-title-row">
+                        <h2>Notes</h2>
+                        <button class="btn btn-primary" id="new-note-btn">New</button>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="note-title-input" 
+                        placeholder="Note title..."
+                        class="note-title-input"
+                    >
+                </div>
+
+                <div class="notes-list" id="notes-list">
+                    <div class="empty-state">
+                        <p>No notes yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Note Editor -->
+            <div class="note-editor">
+                <div id="note-editor-header" class="note-editor-header" style="display: none;">
+                    <h3 id="current-note-title">Note Title</h3>
+                    <div class="note-date" id="current-note-date">Today</div>
+                </div>
+                
+                <div class="note-editor-content">
+                    <textarea 
+                        id="note-content" 
+                        placeholder="Start writing..."
+                        style="display: none;"
+                    ></textarea>
+                    
+                    <div id="note-editor-placeholder" class="note-editor-placeholder">
+                        Select a note to edit or create a new one
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
