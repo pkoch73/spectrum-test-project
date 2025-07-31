@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
 import {
+  Provider,
   Button,
   Form,
-  CheckboxGroup,
-  Divider
-} from '@adobe/react-spectrum'
+  TextField,
+  Checkbox,
+  Divider,
+  Heading,
+  Text,
+  Card
+} from '@react-spectrum/s2'
 
 function App() {
   const [todos, setTodos] = useState([])
@@ -37,93 +42,78 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Todo List</h1>
-      
-      <Form onSubmit={handleSubmit}>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', marginBottom: '1rem' }}>
-          <div style={{ flex: 1 }}>
-            <label htmlFor="todo-input" style={{ display: 'block', marginBottom: '0.5rem' }}>
-              New Todo
-            </label>
-            <input
-              id="todo-input"
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: '1px solid #ccc',
-                borderRadius: '4px'
-              }}
-            />
+    <Provider theme="light">
+      <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+        <Heading level={1}>Todo List</Heading>
+        
+        <Form onSubmit={handleSubmit}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+            <div style={{ flex: 1 }}>
+              <TextField
+                label="New Todo"
+                value={inputValue}
+                onChange={setInputValue}
+                placeholder="Enter a new todo item"
+              />
+            </div>
+            <Button
+              variant="accent"
+              isDisabled={!inputValue.trim()}
+              onPress={addTodo}
+            >
+              Add
+            </Button>
           </div>
-          <Button
-            variant="accent"
-            type="submit"
-            isDisabled={!inputValue.trim()}
-          >
-            Add
-          </Button>
+        </Form>
+
+        <Divider />
+
+        <div style={{ marginTop: '1.5rem' }}>
+          {todos.length === 0 ? (
+            <Text>No todos yet. Add one above!</Text>
+          ) : (
+            <div>
+              {todos.map(todo => (
+                <Card key={todo.id} variant="secondary">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.5rem' }}>
+                    <Checkbox
+                      isSelected={todo.completed}
+                      onChange={() => toggleTodo(todo.id)}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <Text>
+                        <span
+                          style={{
+                            textDecoration: todo.completed ? 'line-through' : 'none',
+                            opacity: todo.completed ? 0.6 : 1
+                          }}
+                        >
+                          {todo.text}
+                        </span>
+                      </Text>
+                    </div>
+                    <Button
+                      variant="secondary"
+                      onPress={() => removeTodo(todo.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
-      </Form>
 
-      <Divider />
-
-      <div style={{ marginTop: '1rem' }}>
-        {todos.length === 0 ? (
-          <p>No todos yet. Add one above!</p>
-        ) : (
-          <div>
-            {todos.map(todo => (
-              <div
-                key={todo.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '0.75rem',
-                  marginBottom: '0.5rem',
-                  backgroundColor: '#f5f5f5',
-                  borderRadius: '4px'
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={todo.completed}
-                  onChange={() => toggleTodo(todo.id)}
-                />
-                <span
-                  style={{
-                    flex: 1,
-                    textDecoration: todo.completed ? 'line-through' : 'none',
-                    opacity: todo.completed ? 0.6 : 1
-                  }}
-                >
-                  {todo.text}
-                </span>
-                <Button
-                  variant="secondary"
-                  size="S"
-                  onPress={() => removeTodo(todo.id)}
-                >
-                  Delete
-                </Button>
-              </div>
-            ))}
+        {todos.length > 0 && (
+          <div style={{ marginTop: '1.5rem' }}>
+            <Text>
+              {todos.filter(todo => !todo.completed).length} of {todos.length} remaining
+            </Text>
           </div>
         )}
       </div>
-
-      {todos.length > 0 && (
-        <div style={{ marginTop: '1rem' }}>
-          <p>
-            {todos.filter(todo => !todo.completed).length} of {todos.length} remaining
-          </p>
-        </div>
-      )}
-    </div>
+    </Provider>
   )
 }
 
