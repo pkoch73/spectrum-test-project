@@ -1,100 +1,124 @@
 import React, { useState } from 'react'
 import {
   Provider,
-  Button,
+  Heading,
   Form,
   TextField,
-  Checkbox,
+  Button,
   Divider,
-  Heading,
-  Text,
-  Card
+  Card,
+  Checkbox,
+  Text
 } from '@react-spectrum/s2'
 
-function App() {
+function TodoApp() {
   const [todos, setTodos] = useState([])
-  const [inputValue, setInputValue] = useState('')
+  const [newTodoText, setNewTodoText] = useState('')
 
-  const addTodo = () => {
-    if (inputValue.trim()) {
-      setTodos([...todos, {
+  const handleAddTodo = () => {
+    if (newTodoText.trim()) {
+      const newTodo = {
         id: Date.now(),
-        text: inputValue.trim(),
+        text: newTodoText.trim(),
         completed: false
-      }])
-      setInputValue('')
+      }
+      setTodos([...todos, newTodo])
+      setNewTodoText('')
     }
   }
 
-  const removeTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id))
-  }
-
-  const toggleTodo = (id) => {
+  const handleToggleTodo = (id) => {
     setTodos(todos.map(todo =>
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     ))
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    addTodo()
+  const handleDeleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id))
   }
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault()
+    handleAddTodo()
+  }
+
+  const completedCount = todos.filter(todo => todo.completed).length
+  const totalCount = todos.length
+  const remainingCount = totalCount - completedCount
 
   return (
     <Provider theme="light">
-      <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-        <Heading level={1}>Todo List</Heading>
+      <div style={{ 
+        maxWidth: '600px', 
+        margin: '0 auto', 
+        padding: '2rem',
+        minHeight: '100vh'
+      }}>
+        <Heading level={1}>My Todo List</Heading>
         
-        <Form onSubmit={handleSubmit}>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+        <Form onSubmit={handleFormSubmit}>
+          <div style={{ 
+            display: 'flex', 
+            gap: '1rem', 
+            alignItems: 'flex-end',
+            marginTop: '1.5rem',
+            marginBottom: '2rem'
+          }}>
             <div style={{ flex: 1 }}>
               <TextField
-                label="New Todo"
-                value={inputValue}
-                onChange={setInputValue}
-                placeholder="Enter a new todo item"
+                label="Add new todo"
+                placeholder="What do you need to do?"
+                value={newTodoText}
+                onChange={setNewTodoText}
               />
             </div>
             <Button
               variant="accent"
-              isDisabled={!inputValue.trim()}
-              onPress={addTodo}
+              onPress={handleAddTodo}
+              isDisabled={!newTodoText.trim()}
             >
-              Add
+              Add Todo
             </Button>
           </div>
         </Form>
 
         <Divider />
 
-        <div style={{ marginTop: '1.5rem' }}>
+        <div style={{ marginTop: '2rem' }}>
           {todos.length === 0 ? (
-            <Text>No todos yet. Add one above!</Text>
+            <Card variant="secondary">
+              <div style={{ padding: '2rem', textAlign: 'center' }}>
+                <Text>No todos yet! Add your first todo above.</Text>
+              </div>
+            </Card>
           ) : (
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {todos.map(todo => (
                 <Card key={todo.id} variant="secondary">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.5rem' }}>
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '1rem',
+                    padding: '1rem'
+                  }}>
                     <Checkbox
                       isSelected={todo.completed}
-                      onChange={() => toggleTodo(todo.id)}
+                      onChange={() => handleToggleTodo(todo.id)}
                     />
                     <div style={{ flex: 1 }}>
                       <Text>
-                        <span
-                          style={{
-                            textDecoration: todo.completed ? 'line-through' : 'none',
-                            opacity: todo.completed ? 0.6 : 1
-                          }}
-                        >
+                        <span style={{
+                          textDecoration: todo.completed ? 'line-through' : 'none',
+                          opacity: todo.completed ? 0.6 : 1,
+                          fontSize: '1rem'
+                        }}>
                           {todo.text}
                         </span>
                       </Text>
                     </div>
                     <Button
                       variant="secondary"
-                      onPress={() => removeTodo(todo.id)}
+                      onPress={() => handleDeleteTodo(todo.id)}
                     >
                       Delete
                     </Button>
@@ -106,15 +130,26 @@ function App() {
         </div>
 
         {todos.length > 0 && (
-          <div style={{ marginTop: '1.5rem' }}>
-            <Text>
-              {todos.filter(todo => !todo.completed).length} of {todos.length} remaining
-            </Text>
-          </div>
+          <>
+            <Divider />
+            <div style={{ 
+              marginTop: '1.5rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <Text>
+                {remainingCount} of {totalCount} remaining
+              </Text>
+              <Text>
+                {completedCount} completed
+              </Text>
+            </div>
+          </>
         )}
       </div>
     </Provider>
   )
 }
 
-export default App
+export default TodoApp

@@ -1,16 +1,17 @@
 {
-    "mcpServers": {
-        "react-spectrum": {
-            "command": "node",
-            "args": [
-                "mcp-proxy.js"
-            ],
-            "disabled": false,
-            "autoApprove": [
-                "mcp_react_spectrum_get_component",
-                "mcp_react_spectrum_search_components",
-                "mcp_react_spectrum_list_all_components"
-            ]
-        }
+  "mcpServers": {
+    "react-spectrum": {
+      "command": "node",
+      "args": [
+        "mcp-proxy.js"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "mcp_react_spectrum_get_component",
+        "mcp_react_spectrum_search_components",
+        "mcp_react_spectrum_list_all_components",
+        "get_component"
+      ]
     }
+  }
 }
